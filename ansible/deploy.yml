@@ -1,0 +1,51 @@
+- hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install pip
+      yum:
+        name: python3-pip
+        state: present
+
+    - name: Install Docker Python Module
+      pip:
+        name: docker
+
+    - name: Run MongoDB Container
+      docker_container:
+        name: mongodb
+        image: mongo
+        state: started
+        restart_policy: always
+        ports:
+          - "27017:27017"
+
+    - name: Run Node.js App
+      docker_container:
+        name: ecommerce-app
+        image: node:18
+        command: tail -f /dev/null
+        state: started
+        ports:
+          - "3000:3000"
+
+    - name: Run Nginx
+      docker_container:
+        name: nginx
+        image: nginx
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
