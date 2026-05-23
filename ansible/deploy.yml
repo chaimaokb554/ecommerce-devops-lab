@@ -70,7 +70,7 @@
 
     - name: Copy app folder
       copy:
-        src: app/
+        src: ../app/
         dest: /home/ubuntu/app/app/
         owner: ubuntu
         group: ubuntu
